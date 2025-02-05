@@ -1,8 +1,12 @@
-# React + Vite
+# Accountability
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Accountability is a site built for logging and tracking long term accountability goals.
 
-Currently, two official plugins are available:
+Log a goal, track it for 3/6/9/12 months, complete. Repeat.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Built using
+- React / Vite
+- Tailwind
+- AWS API Gateway
+- AWS Lambda
+- AWS RDS
