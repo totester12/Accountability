@@ -11,7 +11,7 @@ const Login = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center text-white">
-      <div className="w-full max-w-sm p-8 space-y-6 bg-slate-900 shadow-lg border border-slate-700">
+      <div className="w-full max-w-sm p-8 space-y-6 bg-slate-900 shadow-lg border border-slate-800">
         <h2 className="text-2xl font-bold text-center text-slate-100">Sign In</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -53,7 +53,7 @@ const Login = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full px-4 py-2 bg-sky-600 hover:bg-sky-700 transition border border-slate-600"
+            className="w-full px-4 py-2 bg-slate-600 hover:bg-slate-500 transition border border-slate-900"
           >
             Login
           </button>
