@@ -30,7 +30,7 @@ const GoalCard = ({ goal }) => {
     return (
       <div onClick={()=>console.log(goal.id)}className="p-4 bg-slate-900 border border-slate-700 shadow-md rounded-lg hover:bg-slate-800 transition">
         <h3 className="text-lg font-semibold text-white">{goal.title}</h3>
-        <p className="text-gray-300 text-sm">Duration: {goal.duration} months</p>
+        <p className="text-gray-300 text-sm">{goal.duration} months</p>
   
         <div className="flex items-center justify-between text-xs text-gray-400 mt-2">
           <span>
@@ -53,7 +53,7 @@ const GoalCard = ({ goal }) => {
             <div className="flex mb-2">
               <div className="w-full bg-gray-300 rounded-full h-1.5">
                 <div
-                  className="bg-blue-500 h-1.5 rounded-full"
+                  className="bg-slate-600 h-1.5 rounded-full"
                   style={{ width: `${progress}%` }}
                 ></div>
               </div>
