@@ -13,22 +13,22 @@ const GoalCard = ({ goal }) => {
     const lastCheckInDate = goal.last_check_in ? new Date(goal.last_check_in) : currentDate;
   
     // Calculate the elapsed time in days
-    const elapsedTimeInDays = calculateDaysBetween(startDate, lastCheckInDate);
+    const elapsedTimeInDays = calculateDaysBetween(new Date(goal.startDate), lastCheckInDate);
   
     // Calculate progress as percentage (between 0 and 100)
     const progress = Math.min((elapsedTimeInDays / durationInDays) * 100, 100);
   
     // Dark colors for the status
     const statusColors = {
-      active: { bg: "bg-green-700", text: "text-white" },    // Dark Green
+      active: { bg: "bg-green-900", text: "text-white" },    // Dark Green
       completed: { bg: "bg-blue-700", text: "text-white" },  // Dark Blue
-      failed: { bg: "bg-red-700", text: "text-white" },      // Dark Red
+      failed: { bg: "bg-red-800", text: "text-white" },      // Dark Red
     };
   
     const statusClass = statusColors[goal.status] || { bg: "bg-gray-700", text: "text-white" }; // Default to dark gray
   
     return (
-      <div onClick={()=>console.log(goal.id)}className="p-4 bg-slate-900 border border-slate-700 shadow-md rounded-lg hover:bg-slate-800 transition">
+      <div onClick={()=>console.log(goal.id)}className="p-4 bg-slate-900 border border-slate-950 shadow-md rounded-sm hover:bg-slate-800 transition">
         <h3 className="text-lg font-semibold text-white">{goal.title}</h3>
         <p className="text-gray-300 text-sm">{goal.duration} months</p>
   
@@ -36,11 +36,15 @@ const GoalCard = ({ goal }) => {
           <span>
             Last check-in: {goal.last_check_in ? new Date(goal.last_check_in).toLocaleDateString() : "No check-ins yet"}
           </span>
+          
+        </div>
+        <div className="flex items-center justify-between text-xs text-gray-400 mt-2">
+          
           <span className={`px-2 py-0.5 rounded ${statusClass.bg} ${statusClass.text}`}>{goal.status}</span>
         </div>
   
         {/* Progress Bar */}
-        <div className="mt-4">
+        <div className="mt-1">
           <div className="relative pt-1">
             <div className="flex mb-2 items-center justify-between">
               <div>
@@ -51,9 +55,9 @@ const GoalCard = ({ goal }) => {
               </div>
             </div>
             <div className="flex mb-2">
-              <div className="w-full bg-gray-300 rounded-full h-1.5">
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div
-                  className="bg-slate-600 h-1.5 rounded-full"
+                  className="bg-green-900 h-1.5 rounded-full"
                   style={{ width: `${progress}%` }}
                 ></div>
               </div>

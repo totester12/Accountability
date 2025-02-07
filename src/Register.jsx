@@ -14,7 +14,7 @@ const Register = () => {
       return;
     }
     console.log("User registered:", { username, password });
-    navigate("/login"); // Redirect to login after registering
+    navigate("/"); // Redirect to login after registering
   };
 
   return (
@@ -27,7 +27,7 @@ const Register = () => {
           <input
             type="text"
             placeholder="Username"
-            className="w-full px-4 py-2 mt-1 bg-slate-800 border border-slate-600 text-white focus:ring focus:ring-slate-500 focus:border-slate-300 outline-none"
+            className="w-full px-4 py-2 mt-1 caret-slate-500 bg-slate-800 border border-slate-600 text-white focus:ring focus:ring-slate-500 focus:border-slate-300 outline-none"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
@@ -37,7 +37,7 @@ const Register = () => {
           <input
             type="password"
             placeholder="Password"
-            className="w-full px-4 py-2 mt-1 bg-slate-800 border border-slate-600 text-white focus:ring focus:ring-slate-500 focus:border-slate-300 outline-none"
+            className="w-full px-4 py-2 mt-1 caret-slate-500 bg-slate-800 border border-slate-600 text-white focus:ring focus:ring-slate-500 focus:border-slate-300 outline-none"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -47,7 +47,7 @@ const Register = () => {
           <input
             type="password"
             placeholder="Confirm Password"
-            className="w-full px-4 py-2 mt-1 bg-slate-800 border border-slate-600 text-white focus:ring focus:ring-slate-500 focus:border-slate-300 outline-none"
+            className="w-full px-4 py-2 mt-1 caret-slate-500 bg-slate-800 border border-slate-600 text-white focus:ring focus:ring-slate-500 focus:border-slate-300 outline-none"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
