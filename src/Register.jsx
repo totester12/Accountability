@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { useNavigate,Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  /*const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
@@ -15,14 +18,30 @@ const Register = () => {
     }
     console.log("User registered:", { username, password });
     navigate("/"); // Redirect to login after registering
+  };*/
+
+  const handleRegister = async () => {
+    try {
+      const response = await axios.get(
+        "yourURL",
+        { username, password } // Ensures cookies are handled correctly
+      ).then(
+        (response) => {
+          console.log(response);
+        }
+      );
+      setMessage("Registration successful!");
+    } catch (error) {
+      setMessage(error.response?.data?.message || "Registration failed.");
+    }
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center  text-white">
       <div className="w-full max-w-sm p-8 space-y-6 bg-slate-900 shadow-lg border border-slate-800">
         <h2 className="text-2xl font-bold text-center">Register</h2>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
+
+        <form className="space-y-4">
           {/* Username Input */}
           <input
             type="text"
@@ -54,14 +73,14 @@ const Register = () => {
           />
 
           {/* Register Button */}
-          <button type="submit" className="w-full px-4 py-2 bg-slate-600 hover:bg-slate-500 transition border border-slate-900">
+          <button  onClick={handleRegister} className="w-full px-4 py-2 bg-slate-600 hover:bg-slate-500 transition border border-slate-900">
             Register
           </button>
         </form>
 
         {/* Link to Login */}
         <p className="text-center mt-4">
-          Already have an account? <Link to= "/" className="text-blue-400">Login</Link>
+          Already have an account? <Link to="/" className="text-blue-400">Login</Link>
         </p>
       </div>
     </div>
