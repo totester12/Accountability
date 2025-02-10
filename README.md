@@ -10,3 +10,14 @@ Built using
 - AWS API Gateway
 - AWS Lambda
 - AWS RDS
+
+
+Setup
+-------------------------
+VPC - 2 pub 2 priv
+RDS in private subnet group
+Lambdas connected via VPC/Subnet, triggered by API Gateway events
+API Gateway public endpoints
+-------------------------
+
+DB Code and Lambda code in project
