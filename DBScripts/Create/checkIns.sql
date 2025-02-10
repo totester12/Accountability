@@ -1,0 +1,6 @@
+CREATE TABLE checkins (
+  id UUID PRIMARY KEY,
+  goalId UUID REFERENCES goals(id) ON DELETE CASCADE,
+  date DATE NOT NULL,
+  note TEXT
+);
