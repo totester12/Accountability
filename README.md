@@ -12,12 +12,15 @@ Built using
 - AWS RDS
 
 
-Setup
--------------------------
-VPC - 2 pub 2 priv
-RDS in private subnet group
-Lambdas connected via VPC/Subnet, triggered by API Gateway events
-API Gateway public endpoints
--------------------------
+# Project Architecture
 
-DB Code and Lambda code in project
+Current project setup
+- One VPC, two public two private subnets spanning two AZs
+- RDS sat in private subnets
+- API Gateway with Lambdas triggered from endpoints
+- Lambdas in VPC Private subnets for RDS access
+- Lambdas with role to account for permissions
+  
+
+DB Code held in DBScripts
+Lambda Code held in Lambda
