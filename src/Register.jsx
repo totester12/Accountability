@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const Register = () => {
   const [username, setUsername] = useState("");
@@ -10,31 +13,57 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  /*const handleSubmit = (e) => {
-    e.preventDefault();
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    console.log("User registered:", { username, password });
-    navigate("/"); // Redirect to login after registering
-  };*/
+//handles registration click or submit
+  const handleRegister = async (event) => {
+    event.preventDefault();
 
-  const handleRegister = async () => {
-    try {
-      const response = await axios.get(
-        "yourURL",
-        { username, password } // Ensures cookies are handled correctly
-      ).then(
-        (response) => {
-          console.log(response);
+    if (password == confirmPassword) {
+      if (username.trim() !== "") {
+        const apiString = import.meta.env.VITE_API_URL + "/register"
+        try {
+          const response = await axios.post(
+            apiString,
+            {
+              username: username,
+              passwordHash: password // Make sure the API expects `passwordHash`
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              withCredentials: false, // Ensure no cookies are sent (AWS API Gateway doesn't need them)
+            }
+          );
+
+          if (response.status == 201) {
+            console.log("201 code recieved, navigate off")
+            toast.success("Registration Successful", {
+              position: "bottom-right"
+            })
+            navigate("/");
+          }
+        } catch (error) {
+          console.error("Registration failed:", error);
+          setMessage(error.response?.data?.message || "Registration failed.");
         }
-      );
-      setMessage("Registration successful!");
-    } catch (error) {
-      setMessage(error.response?.data?.message || "Registration failed.");
+      } else {
+        toast.error("Username cannot be empty", {
+          position: "bottom-right"
+        })
+      }
+
+    } else {
+      toast.error("Mismatched Passwords", {
+        position: "bottom-right"
+      })
     }
+
+
   };
+
+
+
+
 
   return (
     <div className="flex min-h-screen items-center justify-center  text-white">
@@ -73,7 +102,7 @@ const Register = () => {
           />
 
           {/* Register Button */}
-          <button  onClick={handleRegister} className="w-full px-4 py-2 bg-slate-600 hover:bg-slate-500 transition border border-slate-900">
+          <button onClick={handleRegister} className="w-full px-4 py-2 bg-slate-600 hover:bg-slate-500 transition border border-slate-900">
             Register
           </button>
         </form>

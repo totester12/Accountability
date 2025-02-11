@@ -15,12 +15,14 @@ export const handler = async (event) => {
   };
 
   // Extract user details from event body
-  const { username, passwordHash } = event;
+  const data = JSON.parse(event.body);
+  const username = data.username;
+  const passwordHash = data.passwordHash;
 
   if (!username || !passwordHash) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ error: "Missing required fields" }),
+      body: JSON.stringify({ error: "Missing required fields, expecting username, passwordHash" }),
     };
   }
 
@@ -37,17 +39,21 @@ export const handler = async (event) => {
 
     const result = await client.query(query, [username, passwordHash]);
     const userId = result.rows[0].id;
+    const userName2 = String(result.rows[0].username);
+    
+
+    const succString = `User ${userName2} created with id ${userId} `
 
     return {
       statusCode: 201,
-      body: JSON.stringify({ message: "User created", userId }),
+      body: JSON.stringify({ message: succString }),
     };
 
   } catch (error) {
     console.error("Database error:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Internal Server Error" }),
+      body: JSON.stringify({ error: "Internal Server Error", issue : String(error) }),
     };
   } finally {
     await client.end();
