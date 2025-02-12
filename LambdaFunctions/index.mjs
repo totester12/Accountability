@@ -1,8 +1,12 @@
 import pkg from "pg";
 const { Client } = pkg;
+import bcrypt from 'bcryptjs';
+
 
 export const handler = async (event) => {
   // Database connection details (Use Secrets Manager in production)
+  const saltRounds = 10
+
   const dbConfig = {
     user: process.env.USER,
     host: process.env.DB_CONN,
@@ -18,6 +22,7 @@ export const handler = async (event) => {
   const data = JSON.parse(event.body);
   const username = data.username;
   const passwordHash = data.passwordHash;
+  
 
   if (!username || !passwordHash) {
     return {
@@ -25,6 +30,11 @@ export const handler = async (event) => {
       body: JSON.stringify({ error: "Missing required fields, expecting username, passwordHash" }),
     };
   }
+
+  //gen Hash
+  const hashedPassword = bcrypt.hashSync(passwordHash, 5);
+
+  
 
   const client = new Client(dbConfig);
 
@@ -37,7 +47,7 @@ export const handler = async (event) => {
       RETURNING id;
     `;
 
-    const result = await client.query(query, [username, passwordHash]);
+    const result = await client.query(query, [username, hashedPassword]);
     const userId = result.rows[0].id;
     const userName2 = String(result.rows[0].username);
     
