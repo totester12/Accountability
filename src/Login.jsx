@@ -1,12 +1,29 @@
 import { useState } from "react";
+import axios from "axios";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Login attempt:", { username, password });
+    const apiString = import.meta.env.VITE_API_URL + "/login"
+    // Make a POST request to the API with the username and password
+    const response = await axios.post(
+      apiString,
+      {
+        username: username,
+        password: password // Make sure the API expects `passwordHash`
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: false, // Ensure no cookies are sent (AWS API Gateway doesn't need them), dont think we need them for login anyway, get cookie back though
+      }
+    );
+    console.log(response.status)
   };
 
   return (
@@ -53,6 +70,7 @@ const Login = () => {
           {/* Submit Button */}
           <button
             type="submit"
+            onClick={handleSubmit}
             className="w-full px-4 py-2 bg-slate-600 hover:bg-slate-500 transition border border-slate-900"
           >
             Login
