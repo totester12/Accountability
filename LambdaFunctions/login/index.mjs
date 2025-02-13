@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 
 export const handler = async (event) => {
     // Database connection details (Use Secrets Manager in production)
-    
+
 
     const dbConfig = {
         user: process.env.USER,
@@ -33,29 +33,50 @@ export const handler = async (event) => {
 
     try {
         await client.connect();
-    
+
         const query = `
           SELECT passwordhash FROM users WHERE username = $1;
         `;
-    
+
         const result = await client.query(query, [username]);
-        //const hashPass = result.rows[0].passwordhash;
-        
-    
+
+        if (result.rows.length === 0) {
+            return {
+                statusCode: 401,
+                body: JSON.stringify({ error: "Invalid username or password" }),
+            };
+        }
+
+        const hashPass = result.rows[0].passwordhash;
+
+        const isMatch = await bcrypt.compare(password, hashPass);
+
+        if (!isMatch) {
+            return {
+                statusCode: 401,
+                body: JSON.stringify({ error: "Invalid username or password" }),
+            };
+        }
+
         return {
-          statusCode: 201,
-          body: JSON.stringify({ message: result.rows[0] }),
+            statusCode: 200,
+            body: JSON.stringify({ message: "Login successful" }),
         };
-    
-      } catch (error) {
+
+        return {
+            statusCode: 201,
+            body: JSON.stringify({ message: result.rows[0].passwordhash }),
+        };
+
+    } catch (error) {
         console.error("Database error:", error);
         return {
-          statusCode: 500,
-          body: JSON.stringify({ error: "Internal Server Error", issue : String(error) }),
+            statusCode: 500,
+            body: JSON.stringify({ error: "Internal Server Error", issue: String(error) }),
         };
-      } finally {
+    } finally {
         await client.end();
-      }
+    }
 
 
 }

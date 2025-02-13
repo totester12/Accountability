@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import {  toast } from "react-toastify";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -7,23 +8,34 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempt:", { username, password });
     const apiString = import.meta.env.VITE_API_URL + "/login"
     // Make a POST request to the API with the username and password
-    const response = await axios.post(
-      apiString,
-      {
+    try {
+      const response = await axios.post(apiString, {
         username: username,
-        password: password 
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: false, // Ensure no cookies are sent (AWS API Gateway doesn't need them), dont think we need them for login anyway, get cookie back though
+        password: password
+      });
+
+      console.log("Success:", response.data);
+      toast.success("Login Succesful", {
+        position: "bottom-right"
+      })
+    } catch (error) {
+      if (error.response) {
+        // Server responded but with an error status (e.g., 404)
+        toast.error(error.response.data.error, {
+          position: "bottom-right"
+        }
+        
+        )
+      } else if (error.request) {
+        // No response received
+        console.error("No response received:", error.request);
+      } else {
+        // Other errors
+        console.error("Request error:", error.message);
       }
-    );
-    console.log(response.status)
+    }
   };
 
   return (
