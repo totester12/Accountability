@@ -14,7 +14,7 @@ const Login = () => {
       apiString,
       {
         username: username,
-        password: password // Make sure the API expects `passwordHash`
+        password: password 
       },
       {
         headers: {
