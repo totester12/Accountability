@@ -17,7 +17,7 @@ export const handler = async (event) => {
 
   // Extract the JWT token from the cookies in the request headers
   const cookies = event.cookies;
-  const tokenCookie = cookies.find(cookie => cookie.startsWith('token='));
+  const tokenCookie = cookies.find(cookie => cookie.startsWith('goaltoken='));
 
   const token = tokenCookie ? tokenCookie.split('=')[1] : null;
 

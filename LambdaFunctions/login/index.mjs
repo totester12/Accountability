@@ -69,7 +69,7 @@ export const handler = async (event) => {
         return {
             statusCode: 200,
             headers: {
-                "Set-Cookie": `token=${token}; HttpOnly; SameSite=None; Secure; Path=/`,
+                "Set-Cookie": `goaltoken=${token}; HttpOnly; SameSite=None; Secure; Path=/`,
             },
             body: JSON.stringify({ message: "Login successful" }),
         };
