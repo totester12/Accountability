@@ -1,6 +1,6 @@
 import pkg from "pg";
 const { Client } = pkg;
-
+import jwt from "jsonwebtoken";  // Importing jwt to decode and verify the token
 
 export const handler = async (event) => {
 
@@ -15,41 +15,51 @@ export const handler = async (event) => {
     }
   };
 
-  // Extract user details from event body, we'd get this 
-  const data = JSON.parse(event.body);
-  const userid = data.userid
-  
+  // Extract the JWT token from the cookies in the request headers
+  const cookies = event.cookies;
+  const tokenCookie = cookies.find(cookie => cookie.startsWith('token='));
 
-  if (!userid ) {
+  const token = tokenCookie ? tokenCookie.split('=')[1] : null;
+
+  if (!token) {
     return {
-      statusCode: 400,
-      body: JSON.stringify({ error: "Missing required fields, expecting username" }),
+      statusCode: 401,
+      body: JSON.stringify({ error: "Missing JWT token" }),
     };
   }
 
-  const client = new Client(dbConfig);
-
   try {
+    // Verify and decode the JWT token to extract the userId
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userid = decoded.userId;  // Assuming userId is inside the token payload
+
+    if (!userid) {
+      return {
+        statusCode: 401,
+        body: JSON.stringify({ error: "Invalid or expired token" }),
+      };
+    }
+
+    // Now use the userId to query the database for the user's goals
+    const client = new Client(dbConfig);
+
     await client.connect();
 
     const query = `
-      select * from goals where userid = $1;;
+      SELECT * FROM goals WHERE userid = $1;
     `;
 
     const result = await client.query(query, [userid]);
 
     return {
-      statusCode: 201,
+      statusCode: 200,
       body: JSON.stringify(result.rows),
     };
-
   } catch (error) {
-    console.error("Database error:", error);
+    console.error("Error verifying token:", error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: "Internal Server Error", issue : String(error) }),
+      body: JSON.stringify({ error: "Internal Server Error", issue: String(error) }),
     };
-  } finally {
-    await client.end();
   }
 };
