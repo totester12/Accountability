@@ -1,10 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
 import {  toast } from "react-toastify";
+import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +25,7 @@ const Login = () => {
       toast.success("Login Succesful", {
         position: "bottom-right"
       })
+      navigate("/goals");
     } catch (error) {
       if (error.response) {
         // Server responded but with an error status (e.g., 404)
