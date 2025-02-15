@@ -14,11 +14,11 @@ const Goals = () => {
     // Function to fetch the user's goals
     const fetchGoals = async () => {
       try {
-        // Ensure the JWT is sent via cookies by passing withCredentials correctly
         const response = await axios.get(apiString, {
-          withCredentials: true,  // This ensures the cookies are sent with the request
+          withCredentials: true,  // This ensures the cookies are sent with the request, goalstoken in the httponly cookie
         });
-        setGoals(response.data);  // Store goals in state
+        console.log(response)
+        setGoals(response.data);  // Store goals in state, when state changes we'll rerender goals
       } catch (err) {
         setError("Failed to load goals");
         toast.error("Failed to load goals", {
@@ -32,7 +32,7 @@ const Goals = () => {
     };
 
     fetchGoals(); // Call the function to fetch goals when the component mounts
-  }, []);
+  }, []);// dependency array is empty, so this effect runs only once on initial render, when we add goals we need to add a dependency to get this to run again
 
   return (
     <div className="min-h-screen text-white py-10 px-6 sm:px-8">
