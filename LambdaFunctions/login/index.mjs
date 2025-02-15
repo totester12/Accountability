@@ -1,6 +1,7 @@
 import pkg from "pg";
 const { Client } = pkg;
 import bcrypt from 'bcryptjs';
+import jwt from "jsonwebtoken";
 
 export const handler = async (event) => {
     // Database connection details (Use Secrets Manager in production)
@@ -35,7 +36,7 @@ export const handler = async (event) => {
         await client.connect();
 
         const query = `
-          SELECT passwordhash FROM users WHERE username = $1;
+          SELECT id,passwordhash FROM users WHERE username = $1;
         `;
 
         const result = await client.query(query, [username]);
@@ -48,6 +49,7 @@ export const handler = async (event) => {
         }
 
         const hashPass = result.rows[0].passwordhash;
+        const userId = result.rows[0].id;
 
         const isMatch = await bcrypt.compare(password, hashPass);
 
@@ -58,16 +60,21 @@ export const handler = async (event) => {
             };
         }
 
+        const token = jwt.sign(
+            { userId }, // Payload
+            process.env.JWT_SECRET, // Secret key (store securely)
+            { expiresIn: "1h" } // Token expiration
+        );
+
         return {
             statusCode: 200,
+            headers: {
+                "Set-Cookie": `token=${token}; HttpOnly; SameSite=None; Secure; Path=/`,
+            },
             body: JSON.stringify({ message: "Login successful" }),
         };
 
-        return {
-            statusCode: 201,
-            body: JSON.stringify({ message: result.rows[0].passwordhash }),
-        };
-
+        
     } catch (error) {
         console.error("Database error:", error);
         return {

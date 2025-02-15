@@ -14,6 +14,8 @@ const Login = () => {
       const response = await axios.post(apiString, {
         username: username,
         password: password
+      },{
+        withCredentials: true
       });
 
       console.log("Success:", response.data);
