@@ -67,7 +67,7 @@ const Goals = () => {
       ) : (
         <div className="flex flex-wrap justify-center gap-6">
           {goals.length > 0 ? (
-            goals.map((goal) => <GoalCard key={goal.id} goal={goal} />)
+            goals.map((goal) => <GoalCard key={goal.id} goal={goal} fetchGoals={fetchGoals} />)
           ) : (
             <p className="text-center text-gray-400 col-span-full">No goals yet.</p>
           )}
@@ -80,7 +80,7 @@ const Goals = () => {
       {/* Floating Add Goal Button */}
       <button
         onClick={() => setIsModalOpen(true)}
-        className="fixed bottom-6 right-6 bg-slate-600 hover:bg-slate-00 text-white p-4 rounded-full shadow-lg text-xl font-bold"
+        className="fixed bottom-6 right-6 bg-slate-600 hover:bg-slate-700 text-white p-4 rounded-full shadow-lg text-xl font-bold"
       >
         +
       </button>
